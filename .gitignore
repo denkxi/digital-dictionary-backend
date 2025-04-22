@@ -7,6 +7,8 @@
 /dataSources/
 /dataSources.local.xml
 
+.idea
+
 # Logs
 logs
 *.log
@@ -83,6 +85,7 @@ yarn-integrity
 
 # dotenv environment variable files
 env
+.env
 env.development.local
 env.test.local
 env.production.local
@@ -111,7 +114,6 @@ vuepress/dist
 
 # vuepress v2.x temp and cache directory
 temp
-cache
 
 # Docusaurus cache and generated files
 docusaurus
