@@ -8,7 +8,7 @@ import type { SignOptions, Secret} from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN!;
-const REFRESH_TOKEN_TTL = parseInt('604800'); // in seconds
+const REFRESH_TOKEN_TTL = parseInt(process.env.REFRESH_TOKEN_TTL || ('1209600')); // in seconds
 
 export class AuthService {
 
