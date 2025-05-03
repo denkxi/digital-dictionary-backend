@@ -1,10 +1,18 @@
-import {model, Schema, Types} from "mongoose";
+import {model, Schema, Types, Document} from "mongoose";
 
 
-const WordCategorySchema = new Schema({
-    name: { type: String, required: true },
-    description: { type: String },
-    createdBy: { type: Types.ObjectId, ref: 'User', required: true },
+export interface IWordCategory {
+    name: string;
+    description?: string;
+    createdBy: Types.ObjectId;
+}
+
+export interface IWordCategoryDocument extends IWordCategory, Document {}
+
+const WordCategorySchema = new Schema<IWordCategoryDocument>({
+    name: { type: String, required: true, trim: true },
+    description: { type: String, trim: true },
+    createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 }, { timestamps: true });
 
-export const WordCategory = model('WordCategory', WordCategorySchema);
+export const WordCategory = model<IWordCategoryDocument>('WordCategory', WordCategorySchema);
