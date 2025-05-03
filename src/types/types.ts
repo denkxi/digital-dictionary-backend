@@ -1,11 +1,11 @@
 
-export enum QuestionType {
+export enum EQuestionType {
     Mixed,
     Translation,
     Pronunciation,
 }
 
-export enum WordClass {
+export enum EWordClass {
     Noun,
     Verb,
     Adjective,
