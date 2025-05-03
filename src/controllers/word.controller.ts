@@ -1,5 +1,4 @@
 import {NextFunction, Request, Response} from "express";
-import {IWord, Word} from "../models/Word";
 import {WordService} from "../services/word.service";
 
 
