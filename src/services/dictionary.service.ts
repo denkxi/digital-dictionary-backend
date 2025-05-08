@@ -14,6 +14,12 @@ export class DictionaryService {
         return saved;
     }
 
+    static async hasAccess(userId: string, dictionaryId: string): Promise<boolean> {
+        const ud = await UserDictionary.findOne({ dictionaryId, userId: userId });
+        return !!ud;
+
+    }
+
     static async listOwn(userId: string): Promise<IDictionaryDocument[]> {
         return Dictionary.find({createdBy: userId}).sort({createdAt: -1}).exec();
     }

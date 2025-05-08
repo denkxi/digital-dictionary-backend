@@ -1,7 +1,6 @@
 import {model, Schema, Types, Document} from "mongoose";
 import {EWordClass} from "../types/types";
 
-
 export interface IWord {
     dictionaryId: Types.ObjectId,
     categoryId?: Types.ObjectId,

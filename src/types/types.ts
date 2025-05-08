@@ -1,15 +1,17 @@
 
 export enum EQuestionType {
-    Mixed,
-    Translation,
-    Pronunciation,
+    Translation = 'translation',
+    Writing = 'writing',
+    Pronunciation = 'pronunciation',
+    Mixed = 'mixed'
 }
 
 export enum EWordClass {
-    Noun,
-    Verb,
-    Adjective,
-    Adverb,
-    Phrase,
-    Expression,
+    Noun = "Noun",
+    Verb = "Verb",
+    Adjective = "Adjective",
+    Adverb = "Adverb",
+    Phrase = "Phrase",
+    Expression = "Expression",
+    Exclamation = "Exclamation",
 }
