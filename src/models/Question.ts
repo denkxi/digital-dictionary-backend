@@ -1,19 +1,33 @@
-import {model, Schema, Types} from "mongoose";
-import {QuestionType} from "../types/types";
+import {model, Schema, Types, Document} from "mongoose";
+import { EQuestionType } from "../types/types";
 
-const QuestionSchema = new Schema({
-    quizId: { type: Types.ObjectId, ref: 'Quiz', required: true },
-    wordId: { type: Types.ObjectId, ref: 'Word', required: true },
+export interface IQuestion {
+    quizId:        Types.ObjectId;
+    wordId:        Types.ObjectId;
+    prompt:        string;
+    choices:       string[];
+    questionType: EQuestionType;
+    correctAnswer: string;
+    userAnswer?:   string;
+    isCorrect?:    boolean;
+}
+
+export interface IQuestionDocument extends IQuestion, Document {}
+
+
+const QuestionSchema = new Schema<IQuestionDocument>({
+    quizId: { type: Schema.Types.ObjectId, ref: 'Quiz', required: true },
+    wordId: { type: Schema.Types.ObjectId, ref: 'Word', required: true },
     prompt: { type: String, required: true },
     choices: {
         type: [String],
         minLength: 4,
         maxLength: 4,
     },
-    questionType: { type: QuestionType, required: true },
+    questionType: { type: String, enum: EQuestionType, required: true },
     correctAnswer: { type: String, required: true },
     userAnswer: { type: String },
     isCorrect: { type: Boolean },
 }, { timestamps: true });
 
-export const Question = model('Question', QuestionSchema);
+export const Question = model<IQuestionDocument>('Question', QuestionSchema);
