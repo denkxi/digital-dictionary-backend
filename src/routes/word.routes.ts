@@ -1,9 +1,9 @@
 import {authenticateAccessToken} from "../middlewares/auth.middleware";
 import {Router} from "express";
-import {body, param} from "express-validator";
+import {body, param, query} from "express-validator";
 import {EWordClass} from "../types/types";
 import {validateRequest} from "../middlewares/validation.middleware";
-import {createWord, deleteWord, getWord, listWords, updateWord} from "../controllers/word.controller";
+import {createWord, deleteWord, getWord, listAllWords, listWords, updateWord} from "../controllers/word.controller";
 
 
 const router = Router();
@@ -29,9 +29,27 @@ router.post(
 );
 
 router.get(
-    '/:dictionaryId',
+    '/all',
     [
-        param('dictionaryId').isMongoId(),
+        query('dictionaryId').isMongoId(),
+    ],
+    validateRequest,
+    listAllWords
+);
+
+router.get(
+    '/',
+    [
+            query('dictionaryId').isMongoId(),
+            query('search').optional().isString(),
+            query('sort')
+                .optional()
+                .isIn(['name-asc','name-desc','date-asc','date-desc']),
+            query('wordClass').optional().isIn(Object.values(EWordClass)),
+            query('starred').optional().isBoolean(),
+            query('learned').optional().isBoolean(),
+            query('page').optional().isInt({ min: 1 }),
+            query('limit').optional().isInt({ min: 1 }),
     ],
     validateRequest,
     listWords

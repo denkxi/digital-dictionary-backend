@@ -36,3 +36,7 @@ export function fallbackType(word: IWordDocument, candidates: EQuestionType[]): 
     }
     return candidates[0];
 }
+
+export function escapeRegex(str: string): string {
+    return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}

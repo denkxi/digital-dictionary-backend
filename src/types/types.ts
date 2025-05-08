@@ -15,3 +15,15 @@ export enum EWordClass {
     Expression = "Expression",
     Exclamation = "Exclamation",
 }
+
+export type SortOption = 'name-asc'|'name-desc'|'date-asc'|'date-desc';
+
+export interface ListOptions {
+    search?: string;
+    sort?: SortOption;
+    wordClass?: EWordClass;
+    starred?: boolean;
+    learned?: boolean;
+    page: number;
+    limit: number;
+}
