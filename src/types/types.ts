@@ -27,3 +27,16 @@ export interface ListOptions {
     page: number;
     limit: number;
 }
+
+export interface CreateWordDTO {
+    dictionaryId: string;
+    categoryId?: string;
+    writing: string;
+    translation: string;
+    pronunciation?: string;
+    definition?: string;
+    useExample?: string;
+    wordClass?: string;
+    isStarred?: boolean;
+    isLearned?: boolean;
+}

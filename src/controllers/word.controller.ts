@@ -1,13 +1,13 @@
 import {NextFunction, Request, Response} from "express";
 import {WordService} from "../services/word.service";
-import {EWordClass, SortOption} from "../types/types";
+import {CreateWordDTO, EWordClass, SortOption} from "../types/types";
 
 
 export async function createWord(req: Request, res: Response, next: NextFunction) {
     try {
         const userId = req.user!.id;
-        const { dictionaryId } = req.params;
-        const word = await WordService.create(userId, dictionaryId, req.body);
+        const dto: CreateWordDTO = req.body;
+        const word = await WordService.create(userId, dto);
         res.status(201).json(word);
     }
     catch (error) {

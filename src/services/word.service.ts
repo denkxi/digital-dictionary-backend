@@ -2,17 +2,27 @@ import {IWord, IWordDocument, Word} from "../models/Word";
 import {Dictionary} from "../models/Dictionary";
 import createError from "http-errors";
 import {UserDictionary} from "../models/UserDictionary";
-import {ListOptions} from "../types/types";
+import {CreateWordDTO, ListOptions} from "../types/types";
 import {SortOrder, Types} from "mongoose";
 import {escapeRegex} from "../utils/utils";
 
 
 export class WordService {
-    static async create(userId: string, dictionaryId: string, data: Partial<IWord>): Promise<IWordDocument> {
-        console.log(dictionaryId, userId);
-        const dict = await Dictionary.findOne({ _id: dictionaryId, createdBy: userId }).exec();
+    static async create(userId: string, dto: CreateWordDTO): Promise<IWordDocument> {
+        const dict = await Dictionary.findOne({ _id: dto.dictionaryId, createdBy: userId }).exec();
         if (!dict) throw createError(404, 'Dictionary not found or unauthorized');
-        const word = new Word({ dictionaryId, ...data});
+        const word = new Word({
+            dictionaryId:  dto.dictionaryId,
+            categoryId:    dto.categoryId,
+            writing:       dto.writing,
+            translation:   dto.translation,
+            pronunciation: dto.pronunciation,
+            definition:    dto.definition,
+            useExample:    dto.useExample,
+            wordClass:     dto.wordClass,
+            isStarred:     dto.isStarred,
+            isLearned:     dto.isLearned,
+        });
         return word.save();
     }
 

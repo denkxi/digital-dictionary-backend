@@ -11,9 +11,9 @@ const router = Router();
 router.use(authenticateAccessToken);
 
 router.post(
-    '/:dictionaryId',
+    '/',
     [
-        param('dictionaryId').isMongoId(),
+        body('dictionaryId').isMongoId(),
         body('categoryId').optional().isMongoId(),
         body('writing').isString().notEmpty(),
         body('translation').isString().notEmpty(),
@@ -56,7 +56,7 @@ router.get(
 );
 
 router.get(
-    '/word/:id',
+    '/:id',
     [
         param('id').isMongoId(),
     ],
@@ -64,13 +64,13 @@ router.get(
     getWord
 );
 
-router.put(
+router.patch(
     '/:id',
     [
         param('id').isMongoId(),
         body('categoryId').optional().isMongoId(),
-        body('writing').isString().notEmpty(),
-        body('translation').isString().notEmpty(),
+        body('writing').optional().isString().notEmpty(),
+        body('translation').optional().isString().notEmpty(),
         body('pronunciation').optional().isString(),
         body('definition').optional().isString(),
         body('useExample').optional().isString(),
@@ -83,7 +83,7 @@ router.put(
 );
 
 router.delete(
-    '/word/:id',
+    '/:id',
     [ param('id').isMongoId() ],
     validateRequest,
     deleteWord
