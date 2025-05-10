@@ -105,7 +105,7 @@ export async function listUserDictionaries(req: Request, res: Response, next: Ne
 
 export async function listAllDictionaries(req: Request, res: Response, next: NextFunction): Promise<void> {
     try{
-        const dictionaries = await DictionaryService.listUserDictionaries(req.user!.id);
+        const dictionaries = await DictionaryService.listAllDictionaries();
         res.json(dictionaries);
     }
     catch(error) {

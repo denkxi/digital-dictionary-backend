@@ -74,7 +74,7 @@ export class DictionaryService {
             .exec();
     }
 
-    static async listAllDictionaries(userId: string): Promise<IDictionaryDocument[]> {
+    static async listAllDictionaries(): Promise<IDictionaryDocument[]> {
         return Dictionary.find().exec();
     }
 
