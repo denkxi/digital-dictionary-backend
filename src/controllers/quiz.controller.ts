@@ -1,4 +1,3 @@
-// src/controllers/quiz.controller.ts
 import { Request, Response, NextFunction } from 'express';
 import { QuizService } from '../services/quiz.service';
 import { EQuestionType } from '../types/types';

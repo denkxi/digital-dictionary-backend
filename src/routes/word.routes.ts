@@ -1,9 +1,9 @@
 import {authenticateAccessToken} from "../middlewares/auth.middleware";
 import {Router} from "express";
-import {body, param} from "express-validator";
+import {body, param, query} from "express-validator";
 import {EWordClass} from "../types/types";
 import {validateRequest} from "../middlewares/validation.middleware";
-import {createWord, deleteWord, getWord, listWords, updateWord} from "../controllers/word.controller";
+import {createWord, deleteWord, getWord, listAllWords, listWords, updateWord} from "../controllers/word.controller";
 
 
 const router = Router();
@@ -11,9 +11,9 @@ const router = Router();
 router.use(authenticateAccessToken);
 
 router.post(
-    '/:dictionaryId',
+    '/',
     [
-        param('dictionaryId').isMongoId(),
+        body('dictionaryId').isMongoId(),
         body('categoryId').optional().isMongoId(),
         body('writing').isString().notEmpty(),
         body('translation').isString().notEmpty(),
@@ -29,16 +29,34 @@ router.post(
 );
 
 router.get(
-    '/:dictionaryId',
+    '/all',
     [
-        param('dictionaryId').isMongoId(),
+        query('dictionaryId').isMongoId(),
+    ],
+    validateRequest,
+    listAllWords
+);
+
+router.get(
+    '/',
+    [
+            query('dictionaryId').isMongoId(),
+            query('search').optional().isString(),
+            query('sort')
+                .optional()
+                .isIn(['name-asc','name-desc','date-asc','date-desc']),
+            query('wordClass').optional().isIn(Object.values(EWordClass)),
+            query('starred').optional().isBoolean(),
+            query('learned').optional().isBoolean(),
+            query('page').optional().isInt({ min: 1 }),
+            query('limit').optional().isInt({ min: 1 }),
     ],
     validateRequest,
     listWords
 );
 
 router.get(
-    '/word/:id',
+    '/:id',
     [
         param('id').isMongoId(),
     ],
@@ -46,13 +64,13 @@ router.get(
     getWord
 );
 
-router.put(
+router.patch(
     '/:id',
     [
         param('id').isMongoId(),
         body('categoryId').optional().isMongoId(),
-        body('writing').isString().notEmpty(),
-        body('translation').isString().notEmpty(),
+        body('writing').optional().isString().notEmpty(),
+        body('translation').optional().isString().notEmpty(),
         body('pronunciation').optional().isString(),
         body('definition').optional().isString(),
         body('useExample').optional().isString(),
@@ -65,7 +83,7 @@ router.put(
 );
 
 router.delete(
-    '/word/:id',
+    '/:id',
     [ param('id').isMongoId() ],
     validateRequest,
     deleteWord

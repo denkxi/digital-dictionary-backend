@@ -1,4 +1,3 @@
-// src/routes/quiz.routes.ts
 import { Router } from 'express';
 import { body, param } from 'express-validator';
 import { authenticateAccessToken } from '../middlewares/auth.middleware';

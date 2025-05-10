@@ -4,12 +4,14 @@ import dictionaryRouter from "./dictionary.routes";
 import wordCategoryRouter from "./word-category.routes";
 
 import wordRoutes from "./word.routes";
+import quizRoutes from "./quiz.routes";
 
 const router = Router();
 
 router.use("/auth", authRouter);
-router.use("/dictionary", dictionaryRouter)
-router.use("/word-category", wordCategoryRouter)
-router.use("/word", wordRoutes)
+router.use("/dictionaries", dictionaryRouter)
+router.use("/word-categories", wordCategoryRouter)
+router.use("/words", wordRoutes)
+router.use("/quizzes", quizRoutes)
 
 export default router;
