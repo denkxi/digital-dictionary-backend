@@ -19,10 +19,11 @@ router.use(authenticateAccessToken);
 router.post(
     '/',
     [
+        body('name').isString().notEmpty(),
         body('sourceLanguage').isString().notEmpty(),
         body('targetLanguage').isString().notEmpty(),
         body('description').optional().notEmpty(),
-        body('isOpen').isBoolean().notEmpty(),
+        body('isOpen').optional().isBoolean().notEmpty(),
     ],
     validateRequest,
     createDictionary
@@ -54,10 +55,11 @@ router.patch(
     '/:id',
     [
         param('id').isMongoId(),
+        body('name').isString().notEmpty(),
         body('sourceLanguage').isString().notEmpty(),
         body('targetLanguage').isString().notEmpty(),
         body('description').optional().notEmpty(),
-        body('isOpen').isBoolean().notEmpty(),
+        body('isOpen').optional().isBoolean().notEmpty(),
     ],
     validateRequest,
     updateDictionary

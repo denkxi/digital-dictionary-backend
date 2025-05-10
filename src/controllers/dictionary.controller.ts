@@ -5,8 +5,9 @@ import {DictionaryService} from "../services/dictionary.service";
 export async function createDictionary(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const createdBy = req.user!.id;
-        const { sourceLanguage, targetLanguage, description, isOpen } = req.body;
+        const { name, sourceLanguage, targetLanguage, description, isOpen } = req.body;
         const dict = await DictionaryService.create(
+            name,
             sourceLanguage,
             targetLanguage,
             createdBy,
@@ -61,11 +62,11 @@ export async function getPublicById(req: Request, res: Response, next: NextFunct
 
 export async function updateDictionary(req: Request, res: Response, next: NextFunction): Promise<void> {
     try{
-        const { sourceLanguage, targetLanguage, description, isOpen } = req.body;
+        const { name, sourceLanguage, targetLanguage, description, isOpen } = req.body;
         const dictionaries = await DictionaryService.update(
             req.params.id,
             req.user!.id,
-            { sourceLanguage, targetLanguage, description, isOpen });
+            { name, sourceLanguage, targetLanguage, description, isOpen });
         res.status(201).json(dictionaries);
     }
     catch(error) {

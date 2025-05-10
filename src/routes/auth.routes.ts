@@ -36,7 +36,7 @@ router.post(
 );
 
 router.post(
-    '/refresh-token',
+    '/refresh',
     requireRefreshToken,
     verifyRefreshTokenMetadata,
     refresh

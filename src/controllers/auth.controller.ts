@@ -24,7 +24,7 @@ export async function login(req: Request, res: Response, next: NextFunction){
             sameSite: 'strict',
             maxAge: AuthService.getRefreshTokenTTL() * 1000,
         });
-        res.json({user, accessToken});
+        res.json({user, token: accessToken});
     }
     catch (error){
         next(error);
@@ -43,7 +43,7 @@ export async function refresh(req: Request, res: Response, next: NextFunction){
             sameSite: 'strict',
             maxAge: AuthService.getRefreshTokenTTL() * 1000,
         });
-        res.json({ accessToken })
+        res.json({ token: accessToken })
     }
     catch (error){
         next(error);
