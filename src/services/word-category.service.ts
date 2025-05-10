@@ -1,4 +1,4 @@
-import {IWordCategory, IWordCategoryDocument, WordCategory} from "../models/WordCategory";
+import { IWordCategoryDocument, WordCategory} from "../models/WordCategory";
 import createError from "http-errors";
 import {SortOrder, Types} from "mongoose";
 import {escapeRegex} from "../utils/utils";

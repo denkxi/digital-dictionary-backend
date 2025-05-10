@@ -74,6 +74,11 @@ export class DictionaryService {
             .exec();
     }
 
+    static async listAllDictionaries(userId: string): Promise<IDictionaryDocument[]> {
+        return Dictionary.find().exec();
+    }
+
+
     static async returnDictionary(dictionaryId: string, userId: string,): Promise<void> {
         const result = await UserDictionary.deleteOne({ userId, dictionaryId }).exec();
         if (result.deletedCount === 0) throw createError(404, 'UserDictionary not found');

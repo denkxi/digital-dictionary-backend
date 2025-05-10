@@ -61,8 +61,12 @@ export async function getPublicById(req: Request, res: Response, next: NextFunct
 
 export async function updateDictionary(req: Request, res: Response, next: NextFunction): Promise<void> {
     try{
-        const dictionaries = await DictionaryService.update(req.params.id, req.user!.id, req.body);
-        res.json(dictionaries);
+        const { sourceLanguage, targetLanguage, description, isOpen } = req.body;
+        const dictionaries = await DictionaryService.update(
+            req.params.id,
+            req.user!.id,
+            { sourceLanguage, targetLanguage, description, isOpen });
+        res.status(201).json(dictionaries);
     }
     catch(error) {
         next(error);
@@ -72,7 +76,7 @@ export async function updateDictionary(req: Request, res: Response, next: NextFu
 export async function deleteDictionary(req: Request, res: Response, next: NextFunction): Promise<void> {
     try{
         await DictionaryService.delete(req.params.id, req.user!.id);
-        res.status(204).end();
+        res.status(204).json({success: true}).end();
     }
     catch(error) {
         next(error);
@@ -90,6 +94,16 @@ export async function borrowDictionary(req: Request, res: Response, next: NextFu
 }
 
 export async function listUserDictionaries(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try{
+        const dictionaries = await DictionaryService.listUserDictionaries(req.user!.id);
+        res.json(dictionaries);
+    }
+    catch(error) {
+        next(error);
+    }
+}
+
+export async function listAllDictionaries(req: Request, res: Response, next: NextFunction): Promise<void> {
     try{
         const dictionaries = await DictionaryService.listUserDictionaries(req.user!.id);
         res.json(dictionaries);

@@ -3,7 +3,7 @@ import {authenticateAccessToken} from "../middlewares/auth.middleware";
 import {
     borrowDictionary,
     createDictionary, deleteDictionary,
-    getOwnById, getPublicById,
+    getOwnById, getPublicById, listAllDictionaries,
     listOpen,
     listOwn, listUserDictionaries, returnDictionary,
     updateDictionary
@@ -30,6 +30,8 @@ router.post(
 
 router.get('/', listUserDictionaries);
 
+router.get('/all', listAllDictionaries);
+
 router.get('/all-open', listOpen);
 
 router.get('/created-by-me', listOwn);
@@ -48,7 +50,7 @@ router.get(
     getPublicById
 );
 
-router.put(
+router.patch(
     '/:id',
     [
         param('id').isMongoId(),
@@ -62,7 +64,7 @@ router.put(
 );
 
 router.delete(
-    '/:id/',
+    '/:id',
     [
         param('id').isMongoId()
     ],

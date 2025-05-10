@@ -15,7 +15,7 @@ const DictionarySchema = new Schema({
     targetLanguage: { type: String, required: true },
     description: { type: String },
     createdBy: { type: Types.ObjectId, ref: 'User', required: true },
-    isOpen: { type: Boolean, required: true },
+    isOpen: { type: Boolean, default: false },
 }, { timestamps: { createdAt: true, updatedAt: false } });
 
 export const Dictionary = model<IDictionaryDocument>('Dictionary', DictionarySchema);
