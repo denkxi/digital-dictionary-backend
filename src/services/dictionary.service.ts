@@ -3,12 +3,13 @@ import createError from "http-errors";
 import {IUserDictionaryDocument, UserDictionary} from "../models/UserDictionary";
 
 export class DictionaryService {
-    static async create(sourceLanguage: string,
+    static async create(name: string,
+                        sourceLanguage: string,
                         targetLanguage: string,
                         createdBy: string,
                         description: string,
                         isOpen: boolean) {
-        const dict = new Dictionary({ sourceLanguage, targetLanguage, createdBy, description, isOpen });
+        const dict = new Dictionary({ name, sourceLanguage, targetLanguage, createdBy, description, isOpen });
         const saved = await dict.save();
         await new UserDictionary({userId: createdBy, dictionaryId: saved._id}).save();
         return saved;
@@ -48,7 +49,7 @@ export class DictionaryService {
 
     static async update(id: string,
                         userId: string,
-                        data: Partial<Pick<IDictionaryDocument, 'sourceLanguage' | 'targetLanguage' | 'description' | 'isOpen'>>){
+                        data: Partial<Pick<IDictionaryDocument, 'name' |'sourceLanguage' | 'targetLanguage' | 'description' | 'isOpen'>>){
         const dict = await Dictionary.findOneAndUpdate(
             { _id: id, createdBy: userId },
             {$set: data},
@@ -66,12 +67,18 @@ export class DictionaryService {
         return ud.save();
     }
 
-    static async listUserDictionaries(userId: string): Promise<IUserDictionaryDocument[]> {
-        return UserDictionary
+    static async listUserDictionaries(userId: string): Promise<IDictionaryDocument[]> {
+        const uds = await UserDictionary
             .find({userId})
             .populate('dictionary')
             .sort({ createdAt: -1})
             .exec();
+        return uds.map(u => {
+            if (!u.dictionary) {
+                throw new Error('Dictionary not populated');
+            }
+            return u.dictionary;
+        });
     }
 
     static async listAllDictionaries(): Promise<IDictionaryDocument[]> {

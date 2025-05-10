@@ -1,6 +1,7 @@
 import {model, Schema, Types, Document} from "mongoose";
 
 export interface IDictionary {
+    name: string;
     sourceLanguage: string;
     targetLanguage: string;
     description?: string
@@ -11,6 +12,7 @@ export interface IDictionary {
 export interface IDictionaryDocument extends IDictionary, Document {}
 
 const DictionarySchema = new Schema({
+    name: { type: String, required: true },
     sourceLanguage: { type: String, required: true },
     targetLanguage: { type: String, required: true },
     description: { type: String },
