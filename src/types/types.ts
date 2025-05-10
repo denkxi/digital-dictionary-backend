@@ -40,3 +40,21 @@ export interface CreateWordDTO {
     isStarred?: boolean;
     isLearned?: boolean;
 }
+
+export interface IUserSummary {
+    userId: string;
+    totalQuizzes: number;
+    perfectScores: number;
+    totalMistakes: number;
+    mostMissedWordIds: string[];
+    averageScorePercent: number;
+}
+
+export interface IDictionarySummary {
+    dictionaryId: string;
+    totalWords: number;
+    learnedWords: number;
+    percentageLearned: number;
+    quizzesTaken: number;
+    averageQuizScore: number;
+}
