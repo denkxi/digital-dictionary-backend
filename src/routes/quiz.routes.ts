@@ -5,7 +5,7 @@ import { validateRequest } from '../middlewares/validation.middleware';
 import { EQuestionType } from '../types/types';
 import {
     completeQuiz,
-    getQuestions,
+    getQuestionsAndQuiz,
     getResult, listAll,
     listCompleted,
     listUnfinished,
@@ -36,16 +36,16 @@ router.get(
     '/:id',
     [param('id').isMongoId()],
     validateRequest,
-    getQuestions
+    getQuestionsAndQuiz
 );
 
 router.post(
     '/:id/submit',
     [
         param('id').isMongoId(),
-        body().isArray(),
-        body('*.questionId').isMongoId(),
-        body('*.userAnswer').isString().notEmpty(),
+        body('answers').isArray(),
+        body('answers.*.questionId').isMongoId(),
+        body('answers.*.answer').isString().notEmpty(),
     ],
     validateRequest,
     completeQuiz

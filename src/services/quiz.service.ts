@@ -70,17 +70,24 @@ export class QuizService {
         return quiz;
     }
 
-    static async getQuizQuestions(quizId: string, userId: string): Promise<Pick<IQuestionDocument, '_id' | 'prompt' | 'choices'>[]> {
+    static async getQuizQuestions(quizId: string, userId: string): Promise<Pick<IQuestionDocument, '_id' | 'prompt' | 'choices' | 'type'>[]> {
         const quiz = await Quiz.findOne({ _id: quizId, userId}).exec();
+
         if (!quiz) throw createError(404, 'Quiz not found');
 
         return await Question.find({ quizId })
-            .select('_id prompt choices')
+            .select('_id prompt choices type')
             .lean()
             .exec();
     }
 
-    static async completeQuiz(quizId: string, userId: string, answers: Array<{ questionId: string, userAnswer: string}>): Promise<IQuizDocument> {
+    static async getQuiz(quizId: string): Promise<IQuizDocument> {
+        const quiz = await Quiz.findById(quizId).lean().exec();
+        if(!quiz) throw createError(404, 'Quiz not found');
+        return quiz;
+    }
+
+    static async completeQuiz(quizId: string, userId: string, answers: Array<{ questionId: string, answer: string}>): Promise<IQuizDocument> {
         const quiz = await Quiz.findOne({ _id: quizId, userId }).exec();
         if (!quiz) throw createError(404, 'Quiz not found');
         if (quiz.completedAt) throw createError(400, 'Quiz already completed');
@@ -88,11 +95,11 @@ export class QuizService {
         // const start = quiz.createdAt.getTime();
         let correct = 0;
 
-        for (const { questionId, userAnswer } of answers) {
+        for (const { questionId, answer } of answers) {
             const q = await Question.findById(questionId).exec();
             if (!q) continue;
-            q.userAnswer = userAnswer;
-            q.isCorrect = q.correctAnswer === userAnswer;
+            q.userAnswer = answer;
+            q.isCorrect = q.correctAnswer === answer;
             await q.save();
             if (q.isCorrect) correct++;
         }
@@ -134,8 +141,8 @@ export class QuizService {
             .exec();
     }
 
-    static async getResult(quizId: string, userId: string): Promise<IQuizDocument> {
-        const quiz = await Quiz.findOne({ _id: quizId, userId }).exec();
+    static async getQuizWithResult(quizId: string, userId: string): Promise<IQuizDocument> {
+        const quiz = await Quiz.findOne({ _id: quizId, userId }).lean().exec();
         if (!quiz) throw createError(404, 'Quiz not found');
         if (!quiz.completedAt) throw createError(400, 'Quiz not yet completed');
         return quiz;

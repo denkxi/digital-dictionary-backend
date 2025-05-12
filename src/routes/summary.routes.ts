@@ -10,10 +10,10 @@ import {
 const router = Router();
 router.use(authenticateAccessToken);
 
-router.get('/user', userSummary);
+router.get('/user-summary', userSummary);
 
 router.get(
-    '/dictionary',
+    '/dictionary-summary',
     [
         query('dictionaryId').exists().isMongoId().withMessage('Invalid dictionaryId'),
     ],

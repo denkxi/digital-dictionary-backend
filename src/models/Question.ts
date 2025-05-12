@@ -6,7 +6,7 @@ export interface IQuestion {
     wordId:        Types.ObjectId;
     prompt:        string;
     choices:       string[];
-    questionType: EQuestionType;
+    type: EQuestionType;
     correctAnswer: string;
     userAnswer?:   string;
     isCorrect?:    boolean;
@@ -24,7 +24,7 @@ const QuestionSchema = new Schema<IQuestionDocument>({
         minLength: 4,
         maxLength: 4,
     },
-    questionType: { type: String, enum: EQuestionType, required: true },
+    type: { type: String, enum: EQuestionType, required: true },
     correctAnswer: { type: String, required: true },
     userAnswer: { type: String },
     isCorrect: { type: Boolean },
