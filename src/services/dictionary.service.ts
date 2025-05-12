@@ -1,6 +1,6 @@
 import {Dictionary, IDictionaryDocument} from "../models/Dictionary";
 import createError from "http-errors";
-import {IUserDictionaryDocument, UserDictionary} from "../models/UserDictionary";
+import { UserDictionary} from "../models/UserDictionary";
 
 export class DictionaryService {
     static async create(name: string,
