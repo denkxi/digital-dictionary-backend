@@ -113,3 +113,19 @@ export async function deleteWord(req: Request, res: Response, next: NextFunction
         next(error);
     }
 }
+
+export async function getWordsByIds(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const userId = req.user!.id;
+        const raw = (req.query.ids as string).split(',');
+        const ids = raw.filter(s => s.trim()).map(s => s.trim());
+        const words = await WordService.getByIds(userId, ids);
+        res.json(words);
+    } catch (err) {
+        next(err);
+    }
+}

@@ -35,6 +35,35 @@ export class WordService {
         return Word.find({dictionaryId}).sort({ createdAt: -1}).exec();
     }
 
+    static async getByIds(
+        userId: string,
+        ids: string[]
+    ): Promise<IWordDocument[]> {
+        const objectIds = Array.from(new Set(
+            ids.map(id => {
+                if (!Types.ObjectId.isValid(id)) {
+                    throw createError(400, `Invalid word ID: ${id}`);
+                }
+                return new Types.ObjectId(id);
+            })
+        ));
+
+        const words = await Word.find({ _id: { $in: objectIds } }).exec();
+
+        const result: IWordDocument[] = [];
+        for (const w of words) {
+            const dictId = w.dictionaryId;
+            const owns = await Dictionary.exists({ _id: dictId, createdBy: userId });
+            const borrowed = await UserDictionary.exists({ dictionaryId: dictId, userId });
+            const open = await Dictionary.exists({ _id: dictId, isOpen: true });
+            if (owns || borrowed || open) {
+                result.push(w);
+            }
+        }
+
+        return result;
+    }
+
     static async list(
         userId: string,
         dictionaryId: string,
