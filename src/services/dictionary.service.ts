@@ -42,7 +42,7 @@ export class DictionaryService {
     }
 
     static async delete(id: string, userId: string): Promise<void> {
-        const result = await Dictionary.deleteOne({ id, createdBy: userId }).exec();
+        const result = await Dictionary.deleteOne({ _id: id, createdBy: userId }).exec();
         if (result.deletedCount === 0) throw createError(404, 'Dictionary not found or unauthorized');
         await UserDictionary.deleteMany({ dictionaryId: id }).exec();
     }
@@ -59,12 +59,12 @@ export class DictionaryService {
         return dict;
     }
 
-    static async borrowDictionary(dictionaryId: string, userId: string, ): Promise<IUserDictionaryDocument> {
+    static async borrowDictionary(dictionaryId: string, userId: string, ): Promise<IDictionaryDocument> {
         const dict = await Dictionary.findById(dictionaryId);
         if(!dict) throw createError(404, 'Dictionary not found');
         if(!dict.isOpen) throw createError(403, 'Dictionary is not open for borrowing');
-        const ud = new UserDictionary({userId, dictionaryId});
-        return ud.save();
+        await new UserDictionary({userId, dictionaryId}).save();
+        return dict;
     }
 
     static async listUserDictionaries(userId: string): Promise<IDictionaryDocument[]> {
