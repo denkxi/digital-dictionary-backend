@@ -54,7 +54,7 @@ router.get(
 router.patch(
     '/:id',
     [
-        param('categoryId').isMongoId(),
+        param('id').isMongoId(),
         body('name').optional().isString().notEmpty(),
         body('description').optional().isString(),
     ],
