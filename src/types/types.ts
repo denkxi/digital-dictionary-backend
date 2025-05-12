@@ -1,3 +1,4 @@
+import {IQuiz} from "../models/Quiz";
 
 export enum EQuestionType {
     Translation = 'translation',
@@ -17,6 +18,8 @@ export enum EWordClass {
 }
 
 export type SortOption = 'name-asc'|'name-desc'|'date-asc'|'date-desc';
+
+export type QuizWithName = IQuiz & { dictionaryName: string };
 
 export interface ListOptions {
     search?: string;

@@ -3,7 +3,15 @@ import {Router} from "express";
 import {body, param, query} from "express-validator";
 import {EWordClass} from "../types/types";
 import {validateRequest} from "../middlewares/validation.middleware";
-import {createWord, deleteWord, getWord, listAllWords, listWords, updateWord} from "../controllers/word.controller";
+import {
+    createWord,
+    deleteWord,
+    getWord,
+    getWordsByIds,
+    listAllWords,
+    listWords,
+    updateWord
+} from "../controllers/word.controller";
 
 
 const router = Router();
@@ -53,6 +61,17 @@ router.get(
     ],
     validateRequest,
     listWords
+);
+
+router.get(
+    '/by-ids',
+    [
+        query('ids')
+            .exists().withMessage('ids query param is required')
+            .isString().withMessage('ids must be a comma-separated list'),
+    ],
+    validateRequest,
+    getWordsByIds
 );
 
 router.get(

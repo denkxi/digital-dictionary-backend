@@ -30,6 +30,8 @@ export class DictionaryService {
     }
 
     static async getOwnById(id: string, userId: string): Promise<IDictionaryDocument> {
+        console.log(id, userId);
+
         const dict = await Dictionary.findOne({ _id: id, createdBy: userId }).exec();
         if (!dict) throw createError(404, 'Dictionary not found');
         return dict;
