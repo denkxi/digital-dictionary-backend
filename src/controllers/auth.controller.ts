@@ -55,7 +55,7 @@ export async function logout(req: Request, res: Response, next: NextFunction){
         const token = req.cookies.refreshToken;
         await AuthService.logout(token);
         res.clearCookie('refreshToken');
-        res.json({message: 'Logout successful'});
+        res.sendStatus(204);
     }
     catch (error){
         next(error);
