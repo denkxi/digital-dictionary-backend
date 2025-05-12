@@ -86,8 +86,8 @@ export async function deleteDictionary(req: Request, res: Response, next: NextFu
 
 export async function borrowDictionary(req: Request, res: Response, next: NextFunction): Promise<void> {
     try{
-        const ud = await DictionaryService.borrowDictionary(req.params.id, req.user!.id);
-        res.status(201).json(ud.dictionary);
+        const dictionary = await DictionaryService.borrowDictionary(req.params.id, req.user!.id);
+        res.status(201).json(dictionary);
     }
     catch(error) {
         next(error);

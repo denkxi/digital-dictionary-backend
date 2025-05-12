@@ -76,13 +76,13 @@ export async function getCategory(
 
 
 export async function updateCategory(
-    req: Request<{ categoryId: string }>,
+    req: Request<{ id: string }>,
     res: Response,
     next: NextFunction
 ): Promise<void> {
     try {
         const userId = req.user!.id;
-        const id = req.params.categoryId;
+        const id = req.params.id;
         const { name, description } = req.body;
         const cat = await WordCategoryService.update(
             userId,

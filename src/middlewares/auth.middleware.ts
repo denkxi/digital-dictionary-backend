@@ -3,7 +3,6 @@ import createError from "http-errors";
 import jwt from "jsonwebtoken";
 import {IRefreshTokenDocument, RefreshToken} from "../models/RefreshToken";
 
-const JWT_SECRET = process.env.JWT_SECRET!;
 
 export interface TokenPayload {
     sub: string;
@@ -23,7 +22,10 @@ declare global {
 }
 
 export function authenticateAccessToken(req: Request, res: Response, next: NextFunction) {
+    const JWT_SECRET = process.env.JWT_SECRET!;
+
     const authHeader = req.headers.authorization;
+
     if(!authHeader?.startsWith('Bearer ')) {
         return next(createError(401, 'Access token is missing'));
     }
@@ -35,6 +37,7 @@ export function authenticateAccessToken(req: Request, res: Response, next: NextF
         next();
     }
     catch(error) {
+        console.log('header', authHeader);
         next(createError(401, 'Invalid or expired access token'));
     }
 }

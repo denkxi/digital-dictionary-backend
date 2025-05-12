@@ -6,8 +6,6 @@ import crypto from "crypto";
 
 import type { SignOptions, Secret} from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET!;
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN!;
 const REFRESH_TOKEN_TTL = parseInt(process.env.REFRESH_TOKEN_TTL || ('1209600')); // in seconds
 
 export class AuthService {
@@ -17,6 +15,9 @@ export class AuthService {
     }
 
     static generateAccessToken(user: IUserDocument): string {
+        const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN!;
+        const JWT_SECRET = process.env.JWT_SECRET!;
+
         const options: SignOptions = {expiresIn: JWT_EXPIRES_IN as SignOptions['expiresIn']};
 
         return jwt.sign({ sub: user.id, email: user.email }, JWT_SECRET as Secret, options);
@@ -62,7 +63,6 @@ export class AuthService {
 
     static async refreshToken(oldToken: string, ipAddress?: string, userAgent?: string): Promise<{accessToken: string; refreshToken: string}> {
         const existing = await RefreshToken.findOne({ token: oldToken });
-        console.log(oldToken);
         if(!existing || !existing.isActive()) {
             throw createError(401, "Wrong or expired refresh token");
         }

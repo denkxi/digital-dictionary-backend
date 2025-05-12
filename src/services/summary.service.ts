@@ -3,6 +3,8 @@ import {IDictionarySummary, IUserSummary} from "../types/types";
 import {Types} from "mongoose";
 import {IQuestionDocument, Question} from "../models/Question";
 import {IWordDocument, Word} from "../models/Word";
+import createError from "http-errors";
+import {UserDictionary} from "../models/UserDictionary";
 
 export class SummaryService {
     static async getUserSummary(userId: string): Promise<IUserSummary> {
@@ -52,13 +54,18 @@ export class SummaryService {
         userId: string,
         dictionaryId: string
     ): Promise<IDictionarySummary> {
+        const ud = await UserDictionary.findOne({
+            userId: new Types.ObjectId(userId),
+            dictionaryId: new Types.ObjectId(dictionaryId)
+        }).exec();
+
+        if (!ud) {
+            throw createError(403, 'Unauthorized to view this dictionary');
+        }
+
         const dictOid = new Types.ObjectId(dictionaryId);
 
-        const words = await Word.find({
-            dictionaryId: dictOid,
-            createdBy: userId
-        }).lean().exec() as IWordDocument[];
-
+        const words = await Word.find({ dictionaryId: dictOid }).lean().exec();
         const totalWords = words.length;
         const learnedWords = words.filter(w => w.isLearned).length;
         const percentageLearned = totalWords > 0
@@ -69,10 +76,13 @@ export class SummaryService {
             dictionaryId: dictOid,
             userId: new Types.ObjectId(userId),
             'result.scorePercent': { $exists: true }
-        }).lean().exec() as IQuizDocument[];
+        }).lean().exec();
 
         const quizzesTaken = quizzes.length;
-        const totalScore = quizzes.reduce((sum, q) => sum + (q.result!.scorePercent), 0);
+        const totalScore = quizzes.reduce(
+            (sum, q) => sum + (q.result!.scorePercent),
+            0
+        );
         const averageQuizScore = quizzesTaken > 0
             ? Math.round(totalScore / quizzesTaken)
             : 0;

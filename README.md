@@ -5,3 +5,6 @@
 2. _npm install_
 3. _docker-compose up -d mongo_
 4. _npm run dev_
+
+### **How to run tests:**
+- _npm test_
